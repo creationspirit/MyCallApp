@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#546e7a</color>
+    <color name="colorPrimaryDark">#546e7a</color>
+    <color name="colorPrimaryVariant">#29434e</color>
+    <color name="colorPrimaryLight">#819ca9</color>
+    <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorSecondary">#f57f17</color>
+    <color name="colorSecondaryVariant">#bc5100</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorError">#d32f2f</color>
+    <color name="white">#FFFFFF</color>
+    <color name="cardBorder">#cfd8dc</color>
+</resources>

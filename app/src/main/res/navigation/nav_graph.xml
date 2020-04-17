@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tabsContainerFragment">
+
+    <fragment
+        android:id="@+id/tabsContainerFragment"
+        android:name="com.andrijaperusic.mycallapp.TabsContainerFragment"
+        android:label="fragment_tabs_container"
+        tools:layout="@layout/fragment_tabs_container" >
+        <action
+            android:id="@+id/action_tabsContainerFragment_to_contactDetailFragment"
+            app:destination="@id/contactDetailFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:popExitAnim="@anim/slide_out_top" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactDetailFragment"
+        android:name="com.andrijaperusic.mycallapp.contactdetail.ContactDetailFragment"
+        android:label="ContactDetailFragment">
+        <argument
+            android:name="lookupKey"
+            app:argType="string" />
+    </fragment>
+</navigation>

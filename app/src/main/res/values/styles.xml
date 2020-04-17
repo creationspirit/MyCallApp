@@ -1,0 +1,25 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorError">@color/colorError</item>
+    </style>
+
+    <style name="TitleSecondary" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">@color/colorSecondary</item>
+    </style>
+
+    <style name="ShadowedHeadline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:shadowColor">@color/white</item>
+        <item name="android:shadowDx">-2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">0.01</item>
+    </style>
+
+</resources>
