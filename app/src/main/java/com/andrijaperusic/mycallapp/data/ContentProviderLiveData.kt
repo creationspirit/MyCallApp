@@ -22,6 +22,10 @@ abstract class ContentProviderLiveData<T>(
 
     private val ioScope = CoroutineScope(Dispatchers.IO + contentProviderJob)
 
+    init {
+        value = null
+    }
+
     override fun onActive() {
         observer = object : ContentObserver(null) {
             override fun onChange(self: Boolean) {
@@ -36,6 +40,7 @@ abstract class ContentProviderLiveData<T>(
     }
 
     override fun onInactive() {
+        // Stop observing content changes if there are no active lifecycle owners observing
         context.contentResolver.unregisterContentObserver(observer)
         contentProviderJob.cancel()
     }

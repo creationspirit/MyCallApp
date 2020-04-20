@@ -1,15 +1,21 @@
 package com.andrijaperusic.mycallapp.calllist
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.andrijaperusic.mycallapp.data.CallRepository
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.andrijaperusic.mycallapp.data.CallsDao
 
 class CallListViewModel(
-    application: Application
-): AndroidViewModel(application) {
+    dataSource: CallsDao
+): ViewModel() {
 
-    private val repository = CallRepository.getInstance(application)
+    val calls = dataSource.observeCalls()
 
-    val calls = repository.getCalls()
+    class CallListViewModelFactory(
+        private val dataSource: CallsDao
+    ) : ViewModelProvider.NewInstanceFactory() {
 
+        @Suppress("unchecked_cast")
+        override fun <T : ViewModel?> create(modelClass: Class<T>) =
+            (CallListViewModel(dataSource) as T)
+    }
 }

@@ -3,7 +3,6 @@ package com.andrijaperusic.mycallapp.contactlist
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.andrijaperusic.mycallapp.MyCallApplication
 import com.andrijaperusic.mycallapp.R
 import com.andrijaperusic.mycallapp.TabsContainerFragmentDirections
 import com.andrijaperusic.mycallapp.databinding.FragmentContactListBinding
@@ -20,6 +20,12 @@ import com.andrijaperusic.mycallapp.util.MY_PERMISSIONS_REQUEST_READ_CONTACTS
 import com.google.android.material.snackbar.Snackbar
 
 class ContactListFragment : Fragment() {
+
+    private val viewModel by viewModels<ContactListViewModel> {
+        ContactListViewModel.ContactListViewModelFactory(
+            (requireContext().applicationContext as MyCallApplication).contactDataSource
+        )
+    }
 
     private lateinit var binding: FragmentContactListBinding
 
@@ -45,12 +51,6 @@ class ContactListFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val application = requireNotNull(this.activity).application
-
-        val viewModel: ContactListViewModel by viewModels {
-            ContactListViewModelFactory(application)
-        }
-
         val contactListAdapter = ContactListAdapter( ContactListener {
             viewModel.onContactClicked(it)
         })

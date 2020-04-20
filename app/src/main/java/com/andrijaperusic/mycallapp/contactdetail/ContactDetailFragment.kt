@@ -8,11 +8,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.andrijaperusic.mycallapp.MyCallApplication
 import com.andrijaperusic.mycallapp.PlaceCallPermissionFragment
 import com.andrijaperusic.mycallapp.R
+import com.andrijaperusic.mycallapp.data.ContactsLocalDataSource
 import com.andrijaperusic.mycallapp.databinding.FragmentContactDetailBinding
 
 class ContactDetailFragment : PlaceCallPermissionFragment() {
+
+    private val viewModel by viewModels<ContactDetailViewModel> {
+        ContactDetailViewModel.ContactDetailViewModelFactory(
+            (requireContext().applicationContext as MyCallApplication).contactDataSource
+        )
+    }
+
+    private val args: ContactDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,6 +32,7 @@ class ContactDetailFragment : PlaceCallPermissionFragment() {
 
         val binding: FragmentContactDetailBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_contact_detail, container, false)
+        binding.lifecycleOwner = this
 
         val phoneNumberListAdapter = PhoneNumberListAdapter(PhoneNumberListener {
             placeCall(it)
@@ -28,16 +40,9 @@ class ContactDetailFragment : PlaceCallPermissionFragment() {
 
         binding.phoneNumberList.adapter = phoneNumberListAdapter
 
-        binding.lifecycleOwner = this
-
-        val application = requireNotNull(this.activity).application
-
-        val arguments = ContactDetailFragmentArgs.fromBundle(requireArguments())
-        val viewModel: ContactDetailViewModel by viewModels {
-            ContactDetailViewModelFactory(arguments.lookupKey, application)
-        }
-
         binding.contactDetailViewModel = viewModel
+
+        viewModel.setContactLookupKey(args.lookupKey)
 
         viewModel.contact.observe(viewLifecycleOwner, Observer {
             it?.let {

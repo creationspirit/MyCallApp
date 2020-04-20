@@ -1,7 +1,6 @@
 package com.andrijaperusic.mycallapp.calllist
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +10,10 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.andrijaperusic.mycallapp.MyCallApplication
 import com.andrijaperusic.mycallapp.PlaceCallPermissionFragment
 import com.andrijaperusic.mycallapp.R
+import com.andrijaperusic.mycallapp.data.CallsLocalDataSource
 import com.andrijaperusic.mycallapp.databinding.FragmentCallListBinding
 import com.andrijaperusic.mycallapp.util.MY_PERMISSIONS_REQUEST_CALL_PHONE
 import com.andrijaperusic.mycallapp.util.MY_PERMISSIONS_REQUEST_READ_CALL_LOG
@@ -21,6 +22,12 @@ import com.google.android.material.snackbar.Snackbar
 
 
 class CallListFragment : PlaceCallPermissionFragment() {
+
+    private val viewModel by viewModels<CallListViewModel> {
+        CallListViewModel.CallListViewModelFactory(
+            (requireContext().applicationContext as MyCallApplication).callsDataSource
+        )
+    }
 
     private lateinit var binding: FragmentCallListBinding
 
@@ -48,13 +55,8 @@ class CallListFragment : PlaceCallPermissionFragment() {
     }
 
     private fun setupViewModel() {
-        val application = requireNotNull(this.activity).application
-        val viewModel: CallListViewModel by viewModels {
-            CallListViewModelFactory(application)
-        }
-
         val callListAdapter = CallListAdapter(CallListener {
-            startActivity(Intent(Intent.ACTION_DIAL, buildPhoneUri(it)))
+            placeCall(buildPhoneUri(it))
         })
         binding.callList.adapter = callListAdapter
 

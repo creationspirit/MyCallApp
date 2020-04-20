@@ -1,30 +1,22 @@
 package com.andrijaperusic.mycallapp.contactlist
 
-import android.app.Application
-import android.provider.ContactsContract
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import com.andrijaperusic.mycallapp.data.ContactRepository
+import androidx.lifecycle.*
+import com.andrijaperusic.mycallapp.data.ContactDao
 import com.andrijaperusic.mycallapp.data.models.Contact
-import timber.log.Timber
 
 class ContactListViewModel(
-    application: Application
-): AndroidViewModel(application) {
+    dataSource: ContactDao
+): ViewModel() {
 
-    private val repository = ContactRepository.getInstance(application)
-
-    val contacts: LiveData<List<Contact>> = repository.getContacts()
-
-    private val _navigateToContactDetail = MutableLiveData<String>()
-    val navigateToContactDetail
-        get() = _navigateToContactDetail
+    val contacts: LiveData<List<Contact>> = dataSource.observeContacts()
 
     val showProgressBar: LiveData<Boolean> = Transformations.map(contacts) {
-        it == null || it.isEmpty()
+        it == null
     }
+
+    private val _navigateToContactDetail = MutableLiveData<String>()
+    val navigateToContactDetail: LiveData<String>
+        get() = _navigateToContactDetail
 
     fun onContactClicked(lookupKey: String) {
         _navigateToContactDetail.value = lookupKey
@@ -32,5 +24,14 @@ class ContactListViewModel(
 
     fun doneNavigating() {
         _navigateToContactDetail.value = null
+    }
+
+    class ContactListViewModelFactory(
+        private val dataSource: ContactDao
+    ) : ViewModelProvider.NewInstanceFactory() {
+
+        @Suppress("unchecked_cast")
+        override fun <T : ViewModel?> create(modelClass: Class<T>) =
+            (ContactListViewModel(dataSource) as T)
     }
 }

@@ -7,28 +7,13 @@ import androidx.lifecycle.LiveData
 import com.andrijaperusic.mycallapp.data.models.Contact
 import com.andrijaperusic.mycallapp.data.models.PhoneNumber
 
-class ContactRepository(private val context: Context) {
+class ContactsLocalDataSource(private val context: Context): ContactDao {
 
-    companion object {
-
-        @Volatile
-        private var INSTANCE: ContactRepository? = null
-
-        fun getInstance(context: Context): ContactRepository {
-            synchronized(this) {
-                if (INSTANCE == null) {
-                    INSTANCE = ContactRepository(context.applicationContext)
-                }
-                return INSTANCE as ContactRepository
-            }
-        }
-    }
-
-    fun getContacts(): LiveData<List<Contact>> {
+    override fun observeContacts(): LiveData<List<Contact>> {
         return ContactsLiveData(context)
     }
 
-    fun getContactWithPhoneNumbers(lookupKey: String): LiveData<Contact> {
+    override fun observeContactDetail(lookupKey: String): LiveData<Contact> {
         return ContactDetailLiveData(lookupKey, context)
     }
 

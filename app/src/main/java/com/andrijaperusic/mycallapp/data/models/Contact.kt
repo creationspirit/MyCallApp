@@ -6,5 +6,5 @@ data class Contact(
     val lookupKey: String,
     val name: String,
     val photoUri: Uri?,
-    val phoneNumbers: List<PhoneNumber>? = listOf()
+    val phoneNumbers: List<PhoneNumber> = listOf()
 )
